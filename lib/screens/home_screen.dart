@@ -44,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
           // Variable de los cohetes
           final rockets = snapshot.data!;
 
-          // Creamos nuestra lista de cohetes dependiendo de la cantidad de rockets recibidos por la API
+          // Creamos nuestra lista de cohetes dependiendo de la cantidad de cohetes recibidos por la API
           return ListView.builder(
             itemCount: rockets.length,
             itemBuilder: (context, index) {
