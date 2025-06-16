@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../models/rocket.dart';
 import '../services/rocket_service.dart';
 import '../screens/rocket_screen.dart';
-import 'package:intl/intl.dart';
 
 // Pantalla inicial
 class HomeScreen extends StatefulWidget {
@@ -28,7 +27,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Cohetes')),
-      // Botón para añadir un país nuevo
       body: FutureBuilder<List<Rocket>>(
         future: futureRockets,
         builder: (context, snapshot) {
@@ -43,15 +41,14 @@ class _HomeScreenState extends State<HomeScreen> {
             return const Center(child: Text('No hay países disponibles'));
           }
 
-          // Variable de rockets
+          // Variable de los cohetes
           final rockets = snapshot.data!;
 
-          // Creamos nuestra lista de rockets dependiendo de la cantidad de rockets recibidos por la API
+          // Creamos nuestra lista de cohetes dependiendo de la cantidad de rockets recibidos por la API
           return ListView.builder(
             itemCount: rockets.length,
             itemBuilder: (context, index) {
               final rocket = rockets[index];
-              final DateFormat formatter = DateFormat('HH:mm:ss dd-MM-yyyy');
               return Card(
                 margin: const EdgeInsets.all(12),
                 elevation: 4,
@@ -60,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     ListTile(
                       title: Text(rocket.nombre, style: const TextStyle(fontWeight: FontWeight.bold)),
-                      subtitle: Text(rocket.nombre + "\n" + formatter.format(DateTime.parse(rocket.fechaLan))),
+                      subtitle: Text(rocket.nombre + "\n" + rocket.fechaLan),
                       onTap: () async {
                         Navigator.push(
                           context,

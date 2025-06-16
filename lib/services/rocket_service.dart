@@ -10,10 +10,12 @@ class RocketService {
   Future<List<Rocket>> fetchRockets() async {
     final response = await http.get(Uri.parse(baseUrl));
 
+    // Si respuesta 200
     if (response.statusCode == 200) {
       final decoded = jsonDecode(utf8.decode(response.bodyBytes));
       final List<dynamic> results = decoded['results'];
 
+      // Devolvemos lista de cohetes
       return results.map((rocketJson) => Rocket.fromJson(rocketJson)).toList();
     } else {
       throw Exception('Error cargando cohetes: ${response.statusCode}');
