@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import '../screens/rocket_screen.dart';
-import '../services/rocket_service.dart';
 import '../models/rocket.dart';
+import '../services/rocket_service.dart';
+import '../screens/rocket_screen.dart';
+import 'package:intl/intl.dart';
 
 // Pantalla inicial
 class HomeScreen extends StatefulWidget {
@@ -18,14 +19,15 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // Cargamos los Rockets
-    futureRockets = RocketService.fetchRockets();
+    // Cargamos los rockets
+    futureRockets = rocketService.fetchRockets();
+    
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Países')),
+      appBar: AppBar(title: Text('Cohetes')),
       // Botón para añadir un país nuevo
       body: FutureBuilder<List<Rocket>>(
         future: futureRockets,
@@ -41,64 +43,29 @@ class _HomeScreenState extends State<HomeScreen> {
             return const Center(child: Text('No hay países disponibles'));
           }
 
-          // Variable de Rockets
-          final Rockets = snapshot.data!;
+          // Variable de rockets
+          final rockets = snapshot.data!;
 
-          // Creamos nuestra lista de Rockets dependiendo de la cantidad de Rockets recibidos por la API
+          // Creamos nuestra lista de rockets dependiendo de la cantidad de rockets recibidos por la API
           return ListView.builder(
-            itemCount: Rockets.length,
+            itemCount: rockets.length,
             itemBuilder: (context, index) {
-              final Rocket = Rockets[index];
+              final rocket = rockets[index];
+              final DateFormat formatter = DateFormat('HH:mm:ss dd-MM-yyyy');
               return Card(
                 margin: const EdgeInsets.all(12),
                 elevation: 4,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 child: Column(
                   children: [
-                    // Añadimos un GestureDetector para detectar si se pulsa la imagen del país
-                    GestureDetector(
-                      onTap: () async {
-                        final eliminado = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            // Abrimos pantalla del país
-                            builder: (_) => RocketDetailScreen(Rocket: Rocket),
-                          ),
-                        );
-
-                        if (eliminado == true) {
-                          setState(() {
-                            futureRockets = RocketService.fetchRockets();
-                          });
-                        }
-                      },
-                      child: ClipRRect(
-                        borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                        child: Image.network(
-                          Rocket.foto,
-                          height: 200,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) => const Icon(Icons.broken_image, size: 80),
-                        ),
-                      ),
-                    ),
                     ListTile(
-                      title: Text(Rocket.nombre, style: const TextStyle(fontWeight: FontWeight.bold)),
-                      subtitle: Text(Rocket.descripcion),
+                      title: Text(rocket.nombre, style: const TextStyle(fontWeight: FontWeight.bold)),
+                      subtitle: Text(rocket.nombre + "\n" + formatter.format(DateTime.parse(rocket.fechaLan))),
                       onTap: () async {
-                        final eliminado = await Navigator.push(
+                        Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (_) => RocketDetailScreen(Rocket: Rocket),
-                          ),
+                          MaterialPageRoute(builder: (_) => RocketDetailScreen(rocket: rocket)),
                         );
-
-                        if (eliminado == true) {
-                          setState(() {
-                            futureRockets = RocketService.fetchRockets();
-                          });
-                        }
                       }
                     ),
                   ],

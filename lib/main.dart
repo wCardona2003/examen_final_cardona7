@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'screens/home_screen.dart';
 
 void main() {
   runApp(const MainApp());
@@ -12,7 +13,6 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       title: 'Login Demo',
       debugShowCheckedModeBanner: false,
-      // Llamamos a la pantalla de login
       home: HomeScreen(), 
     );
   }
